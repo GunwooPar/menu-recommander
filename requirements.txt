@@ -1,0 +1,8 @@
+# Astro Runtime includes the following pre-installed providers packages: https://www.astronomer.io/docs/astro/runtime-image-architecture#provider-packages
+
+# apache-airflow==3.0.2 # Astro Runtime이 자동으로 관리하므로 주석 처리하거나 제거합니다.
+# DAG 파일에서 사용하려는 라이브러리 추가
+requests
+beautifulsoup4
+# pendulum # Airflow에 기본 포함되어 있을 가능성이 높으므로 주석 처리해도 좋습니다.
+python-dotenv
