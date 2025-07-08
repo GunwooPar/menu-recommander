@@ -4,7 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 import os
 import json
-from dotenv import load_dotenv  # 추가
+from dotenv import load_dotenv
 import requests
 from xml.etree import ElementTree
 
