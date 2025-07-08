@@ -1,45 +1,47 @@
-Overview
-========
+# 🛒 마트 할인상품 기반 레시피 추천봇
 
-Welcome to Astronomer! This project was generated after you ran 'astro dev init' using the Astronomer CLI. This readme describes the contents of the project, as well as how to run Apache Airflow on your local machine.
+매주 마트의 할인 전단지를 확인하고, 할인 중인 식재료로 만들 수 있는 요리 레시피를 자동으로 추천해주는 데이터 파이프라인 프로젝트입니다. '오늘 뭐 먹지?'와 '어떻게 하면 더 저렴하게 장을 볼까?'라는 두 가지 고민을 해결하는 것을 목표로 합니다.
 
-Project Contents
-================
+## ✨ 주요 기능
 
-Your Astro project contains the following files and folders:
+* **홈플러스 온라인몰**의 할인 행사 상품 정보 크롤링
+* **식품안전나라 공공데이터포털**의 레시피 Open API 연동
+* **Apache Airflow**를 이용한 데이터 수집 및 추천 파이프라인 자동화
+* 매주 정해진 시간에 자동으로 추천 메뉴 알림 (구현 예정)
 
-- dags: This folder contains the Python files for your Airflow DAGs. By default, this directory includes one example DAG:
-    - `example_astronauts`: This DAG shows a simple ETL pipeline example that queries the list of astronauts currently in space from the Open Notify API and prints a statement for each astronaut. The DAG uses the TaskFlow API to define tasks in Python, and dynamic task mapping to dynamically print a statement for each astronaut. For more on how this DAG works, see our [Getting started tutorial](https://www.astronomer.io/docs/learn/get-started-with-airflow).
-- Dockerfile: This file contains a versioned Astro Runtime Docker image that provides a differentiated Airflow experience. If you want to execute other commands or overrides at runtime, specify them here.
-- include: This folder contains any additional files that you want to include as part of your project. It is empty by default.
-- packages.txt: Install OS-level packages needed for your project by adding them to this file. It is empty by default.
-- requirements.txt: Install Python packages needed for your project by adding them to this file. It is empty by default.
-- plugins: Add custom or community plugins for your project to this file. It is empty by default.
-- airflow_settings.yaml: Use this local-only file to specify Airflow Connections, Variables, and Pools instead of entering them in the Airflow UI as you develop DAGs in this project.
+## 🛠️ 기술 스택
 
-Deploy Your Project Locally
-===========================
+* **Language**: Python
+* **Orchestration**: Apache Airflow
+* **Environment**: Docker, Astro CLI
+* **Libraries**: Requests, BeautifulSoup4
 
-Start Airflow on your local machine by running 'astro dev start'.
+## 🚀 로컬 환경에서 실행하기
 
-This command will spin up five Docker containers on your machine, each for a different Airflow component:
+이 프로젝트는 Astro CLI를 사용하여 로컬 환경에서 실행하는 것을 권장합니다.
 
-- Postgres: Airflow's Metadata Database
-- Scheduler: The Airflow component responsible for monitoring and triggering tasks
-- DAG Processor: The Airflow component responsible for parsing DAGs
-- API Server: The Airflow component responsible for serving the Airflow UI and API
-- Triggerer: The Airflow component responsible for triggering deferred tasks
+**1. 프로젝트 클론**
+```bash
+git clone [https://github.com/GunwooPar/menu-recommander.git](https://github.com/GunwooPar/menu-recommander.git)
+cd menu-recommander
+```
 
-When all five containers are ready the command will open the browser to the Airflow UI at http://localhost:8080/. You should also be able to access your Postgres Database at 'localhost:5432/postgres' with username 'postgres' and password 'postgres'.
+**2. Astro CLI 설치 (WSL2/Linux/macOS)**
+```bash
+# 이전에 설치했다면 건너뛰세요.
+curl -sSL install.astronomer.io | sudo bash
+```
 
-Note: If you already have either of the above ports allocated, you can either [stop your existing Docker containers or change the port](https://www.astronomer.io/docs/astro/cli/troubleshoot-locally#ports-are-not-available-for-my-local-airflow-webserver).
+**3. 파이썬 라이브러리 추가**
 
-Deploy Your Project to Astronomer
-=================================
+프로젝트의 `requirements.txt` 파일에 아래 라이브러리가 포함되어 있는지 확인하고, 없다면 추가합니다.
+```
+requests
+beautifulsoup4
+```
 
-If you have an Astronomer account, pushing code to a Deployment on Astronomer is simple. For deploying instructions, refer to Astronomer documentation: https://www.astronomer.io/docs/astro/deploy-code/
 
-Contact
-=======
 
-The Astronomer CLI is maintained with love by the Astronomer team. To report a bug or suggest a change, reach out to our support.
+## 🗓️ 추후 구현 계획
+
+- [ ] 카카오톡 등 메신저를 통한 알림 기능 추가
