@@ -3,7 +3,7 @@ import json
 import re
 
 def extract_main_ingredient(item_name):
-    # 1. 단위/수량/특수문자/불필요한 단어 제거
+    # 1. 단위/수량/특수문자/불필요한 단어제거
     name = re.sub(r"[0-9]+[gkgmlL\\(\\)\\[\\]박스봉팩]+", "", item_name)  # 단위/수량 제거
     name = re.sub(r"[^가-힣a-zA-Z]", " ", name)  # 한글/영문 외 제거
     name = name.replace("햇", "").replace("국산", "").replace("수입", "")
