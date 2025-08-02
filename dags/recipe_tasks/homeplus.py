@@ -113,6 +113,27 @@ def extract_main_ingredient(item_name):
         return tokens[-1]
     return item_name  # fallback
 
+def test_leaflet_number(leaflet_no):
+    """전단지 번호가 유효한지 테스트"""
+    test_url = f"https://mfront.homeplus.co.kr/leaf/item.json?categoryId=25&leafletNo={leaflet_no}&limit=1&offset=0&sort=RANK"
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+        "Accept": "application/json, text/plain, */*",
+        "Accept-Language": "ko-KR,ko;q=0.9,en;q=0.8",
+        "Connection": "keep-alive",
+        "Referer": "https://mfront.homeplus.co.kr/leaflet",
+        "Origin": "https://mfront.homeplus.co.kr"
+    }
+    try:
+        resp = requests.get(test_url, headers=headers, timeout=5)
+        if resp.status_code == 200 and 'application/json' in resp.headers.get('content-type', ''):
+            data = resp.json()
+            items = data.get('data', {}).get('dataList', [])
+            return len(items) > 0
+    except:
+        pass
+    return False
+
 def get_latest_leaflet_no():
     url = "https://mfront.homeplus.co.kr/api/v1/leaflets?categoryId=25"
     headers = {
@@ -134,10 +155,29 @@ def get_latest_leaflet_no():
             print(f"JSON 파싱 실패: {e}")
     return "244"  # 실패 시 fallback
 
+def get_working_leaflet_no():
+    """브루트포스 방식으로 유효한 전단지 번호 찾기"""
+    # 1. 현재 방식 먼저 시도
+    latest_no = get_latest_leaflet_no()
+    if latest_no and test_leaflet_number(latest_no):
+        print(f"동적 감지된 전단지 번호 사용: {latest_no}")
+        return latest_no
+    
+    # 2. 브루트포스: 300부터 200까지 역순으로 시도
+    print(f"브루트포스 시작: 300부터 200까지 역순 탐색")
+    for test_no in range(300, 199, -1):
+        test_no_str = str(test_no)
+        if test_leaflet_number(test_no_str):
+            print(f"유효한 전단지 번호 발견: {test_no_str}")
+            return test_no_str
+    
+    print("브루트포스 실패, fallback 사용")
+    return "244"  # 최종 fallback
+
 def get_sale_items_from_homeplus():
     """홈플러스에서 할인 품목 크롤링 (JSON API 사용)"""
     print("홈플러스 JSON API 호출을 시작합니다.")
-    latest_leaflet_no = get_latest_leaflet_no()
+    latest_leaflet_no = get_working_leaflet_no()
     api_url = f"https://mfront.homeplus.co.kr/leaf/item.json?categoryId=25&leafletNo={latest_leaflet_no}&limit=20&offset=0&sort=RANK"
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
