@@ -66,8 +66,11 @@ def get_recipe_from_api(ingredients: list):
                 title = row.get('RCP_NM')
                 manual = extract_manual(row)
                 img_url = row.get('ATT_FILE_NO_MAIN')
-                recipes.append(f"[{title}]\n{manual}\n이미지: {img_url}\n---")
+                recipes.append(f"{title}")
+                recipes.append(f"{manual}")
+                recipes.append(f"{img_url}")
     if recipes:
-        return "\n\n".join(recipes)  # str 반환!
+        result = "\n\n".join(recipes)
+        
     else:
         return "추천할 레시피가 없습니다." 
